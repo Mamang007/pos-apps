@@ -1,5 +1,6 @@
 import { seedRoles } from "./src/features/roles/services/seed";
 import { seedUsers } from "./src/features/users/services/seed";
+import { seedCategories } from "./src/features/categories/services/seed";
 
 async function seed() {
   console.log("🌱 Starting database seeding...");
@@ -10,6 +11,9 @@ async function seed() {
 
     // 2. Seed Users
     await seedUsers();
+
+    // 3. Seed Categories
+    await seedCategories();
 
     console.log("✅ Seeding completed successfully!");
   } catch (error) {
