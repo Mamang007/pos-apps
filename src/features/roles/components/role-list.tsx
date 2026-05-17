@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { type Role } from "../types";
 import { getRoles, deleteRole } from "../services/actions";
 import { RoleForm } from "./role-form";
+import { Dialog } from "@/components/ui/dialog";
 
 export function RoleList() {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -14,6 +15,11 @@ export function RoleList() {
   const [isFormOpen, setIsOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Delete confirmation state
+  const [isDeleteDialogOpen, setIsDeleteOpen] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchRoles = async () => {
     setLoading(true);
@@ -26,14 +32,26 @@ export function RoleList() {
     fetchRoles();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this role?")) {
-      const result = await deleteRole(id);
+  const handleDeleteClick = (id: string) => {
+    setRoleToDelete(id);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!roleToDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      const result = await deleteRole(roleToDelete);
       if (result.success) {
         fetchRoles();
+        setIsDeleteOpen(false);
+        setRoleToDelete(null);
       } else {
         alert(result.error);
       }
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -48,6 +66,29 @@ export function RoleList() {
 
   return (
     <div className="space-y-6">
+      {/* Delete Confirmation Modal */}
+      <Dialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        title="Delete Role"
+        description="Are you sure you want to delete this role? This action cannot be undone."
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)} disabled={isDeleting}>
+              Cancel
+            </Button>
+            <Button 
+              variant="default" 
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90" 
+              onClick={confirmDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete Role"}
+            </Button>
+          </>
+        }
+      />
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
@@ -151,7 +192,7 @@ export function RoleList() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => handleDelete(role.id)}
+                              onClick={() => handleDeleteClick(role.id)}
                               className="text-destructive hover:text-destructive hover:bg-destructive/10"
                               title="Delete Role"
                             >
