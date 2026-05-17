@@ -16,9 +16,9 @@ export async function getSuppliers() {
 }
 
 export async function createSupplier(data: SupplierInput) {
-  const validated = supplierSchema.parse(data);
-  
   try {
+    const validated = supplierSchema.parse(data);
+    
     await db.insert(suppliers).values({
       code: validated.code,
       name: validated.name,
@@ -30,18 +30,26 @@ export async function createSupplier(data: SupplierInput) {
     revalidatePath("/suppliers");
     return { success: true };
   } catch (error: any) {
-    if (error.message?.includes("suppliers_code_unique")) {
+    const errorMessage = error.message || "";
+    const detail = error.detail || error.cause?.message || "";
+    
+    if (errorMessage.includes("suppliers_code_unique") || detail.includes("suppliers_code_unique")) {
       return { error: "Supplier code already exists" };
     }
+    
+    if (error.name === "ZodError") {
+      return { error: error.errors[0]?.message || "Validation failed" };
+    }
+
     console.error("Failed to create supplier:", error);
     return { error: "Failed to create supplier" };
   }
 }
 
 export async function updateSupplier(id: string, data: SupplierInput) {
-  const validated = supplierSchema.parse(data);
-  
   try {
+    const validated = supplierSchema.parse(data);
+    
     await db.update(suppliers)
       .set({
         code: validated.code,
@@ -55,7 +63,18 @@ export async function updateSupplier(id: string, data: SupplierInput) {
       .where(eq(suppliers.id, id));
     revalidatePath("/suppliers");
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
+    const errorMessage = error.message || "";
+    const detail = error.detail || error.cause?.message || "";
+    
+    if (errorMessage.includes("suppliers_code_unique") || detail.includes("suppliers_code_unique")) {
+      return { error: "Supplier code already exists" };
+    }
+
+    if (error.name === "ZodError") {
+      return { error: error.errors[0]?.message || "Validation failed" };
+    }
+
     console.error("Failed to update supplier:", error);
     return { error: "Failed to update supplier" };
   }
