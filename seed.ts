@@ -2,28 +2,14 @@ import { db } from "./src/lib/db";
 import { users, roles } from "./src/lib/db/schema";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
+import { seedRoles } from "./src/features/roles/services/seed";
 
 async function seed() {
   console.log("🌱 Starting database seeding...");
 
   try {
     // 1. Seed Roles
-    console.log("Creating roles...");
-    const roleData = [
-      { name: "ADMIN", permissions: ["*"] },
-      { name: "CASHIER", permissions: ["pos.view", "pos.transact"] },
-    ];
-
-    for (const role of roleData) {
-      const existing = await db.select().from(roles).where(eq(roles.name, role.name)).limit(1);
-      if (existing.length === 0) {
-        await db.insert(roles).values({
-          name: role.name,
-          permissions: role.permissions,
-        });
-        console.log(`Role ${role.name} created.`);
-      }
-    }
+    await seedRoles();
 
     const allRoles = await db.select().from(roles);
     const adminRole = allRoles.find((r) => r.name === "ADMIN");
