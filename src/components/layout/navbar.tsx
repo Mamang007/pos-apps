@@ -14,6 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { ThemeToggle } from "./theme-toggle";
+
 export function Navbar() {
   const { toggleSidebar } = useLayoutStore();
   const { data: session } = useSession();
@@ -45,7 +47,8 @@ export function Navbar() {
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex items-center gap-3 pl-2 transition-opacity hover:opacity-80">
