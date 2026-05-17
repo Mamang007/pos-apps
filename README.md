@@ -16,7 +16,23 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database Setup
+
+1. **Configure Environment Variables**:
+   Copy `.env.example` to `.env.local` and update the `DATABASE_URL` with your PostgreSQL connection string.
+
+2. **Verify Connection**:
+   ```bash
+   npm run db:test
+   ```
+
+3. **Push Schema**:
+   Set up your database tables using Drizzle:
+   ```bash
+   npx drizzle-kit push
+   ```
+
+## Documentation
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
