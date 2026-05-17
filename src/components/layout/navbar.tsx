@@ -29,7 +29,7 @@ export function Navbar() {
     : "U";
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center border-b border-zinc-200 bg-white px-4 dark:border-zinc-800 dark:bg-zinc-950">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center border-b border-border bg-card px-4 transition-colors">
       <Button
         variant="ghost"
         size="icon"
@@ -40,9 +40,9 @@ export function Navbar() {
       </Button>
 
       <div className="flex flex-1 items-center justify-between">
-        <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="text-sm font-medium text-muted-foreground">
           Welcome back,{" "}
-          <span className="text-black dark:text-white font-semibold">
+          <span className="text-foreground font-semibold">
             {session?.user?.name || "User"}
           </span>
         </div>
@@ -53,30 +53,30 @@ export function Navbar() {
             <DropdownMenuTrigger>
               <div className="flex items-center gap-3 pl-2 transition-opacity hover:opacity-80">
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-medium leading-none text-foreground">
                     {session?.user?.name}
                   </p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  <p className="text-xs text-muted-foreground">
                     {session?.user?.email}
                   </p>
                 </div>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
-                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted border border-border">
+                  <span className="text-xs font-bold text-foreground">
                     {userInitials}
                   </span>
                 </div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuContent className="w-56 bg-card border-border">
+              <DropdownMenuLabel className="text-foreground">My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-border" />
+              <DropdownMenuItem onClick={() => {}} className="text-foreground hover:bg-accent">
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem
-                className="text-red-600 dark:text-red-400"
+                className="text-red-600 dark:text-red-400 hover:bg-accent"
                 onClick={() => signOut({ callbackUrl: "/auth/login" })}
               >
                 <LogOut className="mr-2 h-4 w-4" />

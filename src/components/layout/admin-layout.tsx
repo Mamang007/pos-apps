@@ -11,7 +11,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider>
-      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <Sidebar />
         <div
           className={cn(

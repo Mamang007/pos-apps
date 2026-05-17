@@ -32,15 +32,15 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-zinc-950",
+        "fixed left-0 top-0 z-40 h-screen border-r border-border bg-card transition-all duration-300",
         sidebarOpen ? "w-64" : "w-20"
       )}
     >
-      <div className="flex h-16 items-center justify-between px-4 border-b border-zinc-100 dark:border-zinc-900">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-border">
         <div className={cn("flex items-center gap-2", !sidebarOpen && "justify-center w-full")}>
-          <Store className="h-8 w-8 text-black dark:text-white" />
+          <Store className="h-8 w-8 text-foreground" />
           {sidebarOpen && (
-            <span className="text-xl font-bold tracking-tight">POS YOGA</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">POS YOGA</span>
           )}
         </div>
         {sidebarOpen && (
@@ -67,8 +67,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-zinc-100 text-black dark:bg-zinc-900 dark:text-white"
-                  : "text-zinc-500 hover:bg-zinc-50 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-white",
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                 !sidebarOpen && "justify-center"
               )}
             >

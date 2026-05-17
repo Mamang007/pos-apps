@@ -5,8 +5,8 @@ export default function Home() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Dashboard</h2>
-          <p className="text-zinc-500 dark:text-zinc-400">Overview of your store performance.</p>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h2>
+          <p className="text-muted-foreground">Overview of your store performance.</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -16,18 +16,18 @@ export default function Home() {
             { label: "Active Products", value: "12,234", trend: "+19% from last month" },
             { label: "Active Customers", value: "573", trend: "+201 since last hour" },
           ].map((stat, i) => (
-            <div key={i} className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{stat.label}</p>
+            <div key={i} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+              <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-2xl font-bold">{stat.value}</span>
+                <span className="text-2xl font-bold text-foreground">{stat.value}</span>
               </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{stat.trend}</p>
+              <p className="text-xs text-muted-foreground mt-1">{stat.trend}</p>
             </div>
           ))}
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 min-h-[300px] flex items-center justify-center">
-           <p className="text-zinc-500 italic">Sales chart will be implemented here...</p>
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm min-h-[300px] flex items-center justify-center">
+           <p className="text-muted-foreground italic">Sales chart will be implemented here...</p>
         </div>
       </div>
     </AdminLayout>
