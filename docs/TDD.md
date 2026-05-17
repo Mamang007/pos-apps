@@ -25,23 +25,23 @@
 
 ### A. Master Data
 - **roles**: `id`, `name`, `permissions` (JSON), `createdAt`, `updatedAt`
-- **users**: `id`, `roleId` (FK), `name`, `email`, `passwordHash`, `createdAt`, `updatedAt`
-- **suppliers**: `id`, `name`, `contactName`, `phone`, `email`, `address`, `createdAt`, `updatedAt`
-- **customers**: `id`, `name`, `phone`, `email`, `loyaltyPoints`, `createdAt`, `updatedAt`
+- **users**: `id`, `roleId` (FK), `name`, `email`, `username` (unique), `passwordHash`, `createdAt`, `updatedAt`
+- **suppliers**: `id`, `code` (unique), `name`, `contactName`, `phone`, `email`, `address`, `createdAt`, `updatedAt`
+- **customers**: `id`, `code` (unique, nullable), `name`, `phone`, `email`, `address`, `loyaltyPoints`, `createdAt`, `updatedAt`
 - **categories**: `id`, `name`, `description`, `createdAt`, `updatedAt`
-- **products**: `id`, `categoryId` (FK), `sku` (unique), `barcode`, `name`, `description`, `costPrice`, `sellPrice`, `minStockLevel`, `createdAt`, `updatedAt`
+- **products**: `id`, `categoryId` (FK), `sku` (unique), `barcode`, `uom`, `name`, `description`, `costPrice`, `sellPrice`, `minStockLevel`, `createdAt`, `updatedAt`
 - **discounts**: `id`, `name`, `type` (PERCENTAGE, FIXED), `value`, `minPurchase`, `maxDiscount`, `startDate`, `endDate`, `isActive`
 - **vouchers**: `id`, `code` (unique), `discountId` (FK), `isUsed`, `usedAt`, `createdAt`
 
 ### B. Core POS / Transaction Flow
-- **purchase_orders**: `id`, `supplierId` (FK), `userId` (FK), `orderDate`, `totalAmount`, `status` (PENDING, RECEIVED, CANCELLED)
+- **purchase_orders**: `id`, `supplierId` (FK), `userId` (FK), `orderDate`, `totalAmount`, `status` (REQUEST, ON PROCESS, RECEIVED)
 - **po_items**: `id`, `poId` (FK), `productId` (FK), `quantity`, `unitCost`, `subtotal`
 - **sales_orders**: `id`, `customerId` (FK - nullable), `userId` (FK), `saleDate`, `subtotal`, `taxAmount`, `discountAmount`, `totalAmount`, `status` (COMPLETED, CANCELLED)
 - **so_items**: `id`, `soId` (FK), `productId` (FK), `quantity`, `unitPrice`, `discountId` (FK - nullable), `discountAmount`, `taxAmount`, `subtotal`
 - **sales_order_payments**: `id`, `soId` (FK), `paymentMethod` (CASH, QRIS, CARD), `amount`, `paymentData` (JSON), `createdAt`
 
 ### C. Inventory Management
-- **stocks**: `id`, `productId` (FK), `quantity`, `lastUpdated`
+- **stocks**: `id`, `productId` (FK, unique), `quantity`, `lastUpdated`
 - **stock_movements**: `id`, `productId` (FK), `changeQuantity`, `type` (SALE, PURCHASE, ADJUSTMENT, RETURN), `referenceId` (UUID), `userId` (FK), `createdAt`
 
 ### D. Authentication (Auth.js / NextAuth)

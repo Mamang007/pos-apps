@@ -21,11 +21,11 @@ A modern Point of Sale (POS) system designed for small to medium-sized retail bu
 
 The foundational data required to operate the POS system. Includes CRUD (Create, Read, Update, Delete) capabilities for:
 
-- **Master Data User (Staff):** Manage cashiers, admins, and their roles/permissions.
-- **Master Data Customer:** Track customer profiles, contact info, and purchase history.
-- **Master Data Supplier:** Manage vendors who supply the inventory, including contact details and terms.
-- **Master Data Barang (Products/Items):** Comprehensive catalog management including SKU, barcode, pricing, categories, and stock levels.
-- **Master Data Discount & Voucher:** Manage discount to applied on sales.
+- **Master Data User (Staff):** Manage cashiers, admins, and their roles/permissions. Authentication is **username-based**.
+- **Master Data Customer:** Track customer profiles (Individual/Business), including contact info, unique codes, addresses, and purchase history.
+- **Master Data Supplier:** Manage vendors who supply the inventory, including unique codes, contact details, and addresses.
+- **Master Data Barang (Products/Items):** Comprehensive catalog management including SKU, barcode, unit of measure (UOM), pricing, categories, and stock levels.
+- **Master Data Discount & Voucher:** Manage promotional rules (Percentage/Fixed) and unique voucher codes to be applied on sales.
 
 ### B. Core POS / Transaction Flow
 
@@ -36,7 +36,11 @@ The foundational data required to operate the POS system. Includes CRUD (Create,
 ### C. Inventory Management
 
 - **Stock Tracking:** Real-time deduction upon sale, low-stock alerts.
-- **Stock Movement:** Handle incoming shipments (receiving from suppliers) and manual adjustments.
+- **Stock Movement (Purchase Orders):** 
+  - Handle incoming shipments via a formal Purchase Order workflow.
+  - Statuses: **REQUEST** (Admin request), **ON PROCESS** (Pending arrival), **RECEIVED** (Arrived and added to stock).
+  - Transitioning to "RECEIVED" automatically updates physical stock levels and records movements.
+  - Manual adjustments for returns or damages.
 
 ### D. Reporting & Analytics
 
