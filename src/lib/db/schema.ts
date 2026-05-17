@@ -102,6 +102,29 @@ export const customers = pgTable("customers", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const discounts = pgTable("discounts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // PERCENTAGE, FIXED
+  value: decimal("value", { precision: 12, scale: 2 }).notNull(),
+  minPurchase: decimal("min_purchase", { precision: 12, scale: 2 }).default("0").notNull(),
+  maxDiscount: decimal("max_discount", { precision: 12, scale: 2 }),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const vouchers = pgTable("vouchers", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  code: text("code").notNull().unique(),
+  discountId: uuid("discount_id").notNull().references(() => discounts.id),
+  isUsed: boolean("is_used").default(false).notNull(),
+  usedAt: timestamp("used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
   categoryId: uuid("category_id").references(() => categories.id),
