@@ -104,6 +104,7 @@ export const products = pgTable("products", {
   categoryId: uuid("category_id").references(() => categories.id),
   sku: text("sku").notNull().unique(),
   barcode: text("barcode"),
+  uom: text("uom").default("Pcs").notNull(),
   name: text("name").notNull(),
   description: text("description"),
   costPrice: decimal("cost_price", { precision: 12, scale: 2 }).notNull(),
