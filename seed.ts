@@ -4,6 +4,7 @@ import { seedCategories } from "./src/features/categories/services/seed";
 import { seedProducts } from "./src/features/products/services/seed";
 import { seedSuppliers } from "./src/features/suppliers/services/seed";
 import { seedCustomers } from "./src/features/customers/services/seed";
+import { seedPromotions } from "./src/features/promotions/services/seed";
 
 async function seed() {
   console.log("🌱 Starting database seeding...");
@@ -26,6 +27,9 @@ async function seed() {
 
     // 6. Seed Customers
     await seedCustomers();
+
+    // 7. Seed Promotions
+    await seedPromotions();
 
     console.log("✅ Seeding completed successfully!");
   } catch (error) {
