@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
 export const authConfig = {
   providers: [
     Credentials({
@@ -9,7 +8,6 @@ export const authConfig = {
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        // Implementation for database lookup and password verification will go here
         return null;
       },
     }),
