@@ -47,7 +47,7 @@ export function Dialog({
       />
       
       {/* Content */}
-      <div className="relative w-full max-w-lg rounded-xl border border-border bg-card p-6 shadow-xl transition-all dark:bg-zinc-900 animate-in fade-in zoom-in duration-200">
+      <div className="relative w-full max-w-lg rounded-xl border border-border bg-card p-6 shadow-xl transition-all animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold text-foreground">{title}</h3>
           <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
