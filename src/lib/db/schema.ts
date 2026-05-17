@@ -92,7 +92,9 @@ export const suppliers = pgTable("suppliers", {
 
 export const customers = pgTable("customers", {
   id: uuid("id").defaultRandom().primaryKey(),
+  code: text("code").unique(),
   name: text("name").notNull(),
+  address: text("address"),
   phone: text("phone"),
   email: text("email"),
   loyaltyPoints: integer("loyalty_points").default(0).notNull(),
