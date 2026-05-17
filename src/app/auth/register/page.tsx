@@ -10,6 +10,7 @@ import { registerUser } from "./actions";
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export default function RegisterPage() {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
+    formData.append("username", username);
     formData.append("password", password);
 
     const result = await registerUser(formData);
@@ -63,6 +65,23 @@ export default function RegisterPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Username
+              </label>
+              <Input
+                id="username"
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="johndoe"
                 className="mt-1"
               />
             </div>

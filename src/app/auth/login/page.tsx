@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,13 +21,13 @@ export default function LoginPage() {
 
     try {
       const result = await signIn("credentials", {
-        email,
+        username,
         password,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        setError("Invalid username or password");
       } else {
         router.push("/");
         router.refresh();
@@ -55,18 +55,18 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
               >
-                Email Address
+                Username
               </label>
               <Input
-                id="email"
-                type="email"
+                id="username"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="johndoe"
                 className="mt-1"
               />
             </div>

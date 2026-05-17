@@ -6,17 +6,23 @@ import bcrypt from "bcrypt";
 export async function registerUser(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
+  const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !username || !password) {
     return { error: "Missing required fields" };
   }
 
   try {
-    // Check if user already exists
+    // Check if user or email already exists
     const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
     if (existingUser.length > 0) {
-      return { error: "User already exists" };
+      return { error: "Email already exists" };
+    }
+
+    const existingUsername = await db.select().from(users).where(eq(users.username, username)).limit(1);
+    if (existingUsername.length > 0) {
+      return { error: "Username already taken" };
     }
 
     // Hash password
@@ -26,6 +32,7 @@ export async function registerUser(formData: FormData) {
     await db.insert(users).values({
       name,
       email,
+      username,
       passwordHash,
     });
 
