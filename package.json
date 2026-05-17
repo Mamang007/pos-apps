@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:test": "tsx --env-file=.env.local test-db.ts"
+    "db:test": "tsx --env-file=.env.local test-db.ts",
+    "db:seed": "tsx --env-file=.env.local seed.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.16.0",
