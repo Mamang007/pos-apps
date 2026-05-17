@@ -66,3 +66,26 @@ These tables are required by the Auth.js Drizzle Adapter to manage database-back
 
 - **Providers**: Supabase, Neon, or self-hosted PostgreSQL.
 - **Connection**: Always use a connection pooler for serverless environments.
+
+## 6. Local Development Setup
+
+### Database Setup
+
+1. **Environment Variables**:
+   - Copy `.env.example` to `.env.local`.
+   - Update `DATABASE_URL` with your local or remote PostgreSQL connection string.
+   - For local development, ensure PostgreSQL is running.
+
+2. **Verify Connection**:
+   - Run `npm run db:test` to verify that the application can connect to the database.
+
+3. **Database Migrations**:
+   - Once connected, run migrations to set up the schema:
+     ```bash
+     npx drizzle-kit push
+     ```
+
+### Authentication Setup
+
+1. **AUTH_SECRET**:
+   - Generate a secret using `openssl rand -base64 32` and add it to `AUTH_SECRET` in `.env.local`.
