@@ -80,6 +80,7 @@ export const categories = pgTable("categories", {
 
 export const suppliers = pgTable("suppliers", {
   id: uuid("id").defaultRandom().primaryKey(),
+  code: text("code").notNull().unique(),
   name: text("name").notNull(),
   contactName: text("contact_name"),
   phone: text("phone"),
