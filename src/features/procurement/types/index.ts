@@ -5,7 +5,7 @@ export type PurchaseOrder = InferSelectModel<typeof purchaseOrders>;
 export type POItem = InferSelectModel<typeof poItems>;
 
 export type POWithDetails = PurchaseOrder & {
-  supplier: InferSelectModel<typeof suppliers>;
+  supplier: InferSelectModel<typeof suppliers> | null;
   items: (POItem & {
     product: InferSelectModel<typeof products>;
   })[];
@@ -14,7 +14,7 @@ export type POWithDetails = PurchaseOrder & {
 export type POStatus = "REQUEST" | "ON PROCESS" | "RECEIVED" | "CANCELLED";
 
 export interface CreatePOInput {
-  supplierId: string;
+  supplierId: string | null;
   items: {
     productId: string;
     quantity: number;

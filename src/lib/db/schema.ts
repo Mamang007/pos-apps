@@ -144,7 +144,7 @@ export const products = pgTable("products", {
 
 export const purchaseOrders = pgTable("purchase_orders", {
   id: uuid("id").defaultRandom().primaryKey(),
-  supplierId: uuid("supplier_id").notNull().references(() => suppliers.id),
+  supplierId: uuid("supplier_id").references(() => suppliers.id),
   userId: uuid("user_id").notNull().references(() => users.id),
   orderDate: timestamp("order_date").defaultNow().notNull(),
   totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),

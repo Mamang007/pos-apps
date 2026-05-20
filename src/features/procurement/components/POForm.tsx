@@ -48,8 +48,8 @@ export function POForm({ suppliers, products, onSuccess, onCancel }: POFormProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supplierId || items.length === 0) {
-      alert("Please select a supplier and add at least one item.");
+    if (items.length === 0) {
+      alert("Please add at least one item.");
       return;
     }
 
@@ -60,7 +60,7 @@ export function POForm({ suppliers, products, onSuccess, onCancel }: POFormProps
 
     setIsSubmitting(true);
     try {
-      const result = await createPO({ supplierId, items });
+      const result = await createPO({ supplierId: supplierId || null, items });
       if ("success" in result && result.success) {
         onSuccess();
       } else {
@@ -83,14 +83,13 @@ export function POForm({ suppliers, products, onSuccess, onCancel }: POFormProps
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Supplier</label>
+          <label className="text-sm font-medium text-foreground">Supplier (Optional)</label>
           <select
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             value={supplierId}
             onChange={(e) => setSupplierId(e.target.value)}
-            required
           >
-            <option value="">Select a supplier</option>
+            <option value="">None / Walk-in Supplier</option>
             {suppliers.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name} ({s.code})
