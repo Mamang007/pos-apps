@@ -65,7 +65,7 @@ export function LoginForm() {
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="johndoe"
+              placeholder="username"
               className="mt-1"
             />
           </div>
@@ -82,7 +82,7 @@ export function LoginForm() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="password"
               className="mt-1"
             />
           </div>
