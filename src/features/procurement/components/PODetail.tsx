@@ -104,18 +104,26 @@ export function PODetail({ po, onBack, onStatusUpdate }: PODetailProps) {
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   Supplier Information
                 </h4>
-                <p className="font-bold text-lg text-foreground">
-                  {po.supplier.name}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {po.supplier.address || "No address provided"}
-                </p>
-                <div className="flex items-center gap-2 mt-2 text-sm text-foreground">
-                  <span className="bg-muted px-1.5 py-0.5 rounded font-mono text-xs">
-                    {po.supplier.code}
-                  </span>
-                  <span>{po.supplier.phone}</span>
-                </div>
+                {po.supplier ? (
+                  <>
+                    <p className="font-bold text-lg text-foreground">
+                      {po.supplier.name}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {po.supplier.address || "No address provided"}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2 text-sm text-foreground">
+                      <span className="bg-muted px-1.5 py-0.5 rounded font-mono text-xs">
+                        {po.supplier.code}
+                      </span>
+                      <span>{po.supplier.phone}</span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm italic text-muted-foreground">
+                    No supplier selected (Walk-in / Direct Purchase)
+                  </p>
+                )}
               </div>
               <div className="sm:text-right">
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">

@@ -30,6 +30,7 @@ const navGroups = [
     items: [
       { label: "Dashboard", href: "/", icon: LayoutDashboard },
       { label: "POS", href: "/pos", icon: ShoppingCart },
+      { label: "Sales History", href: "/sales", icon: FileText },
       { label: "Purchase Order", href: "/procurement", icon: ShoppingBag },
     ],
   },

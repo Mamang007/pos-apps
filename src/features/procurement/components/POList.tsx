@@ -39,7 +39,7 @@ export function POList({ onAddPO, onViewPO }: POListProps) {
 
   const filteredPOs = purchaseOrders.filter(
     (po) =>
-      po.supplier.name.toLowerCase().includes(search.toLowerCase()) ||
+      (po.supplier?.name || "No Supplier").toLowerCase().includes(search.toLowerCase()) ||
       po.status.toLowerCase().includes(search.toLowerCase()) ||
       po.id.toLowerCase().includes(search.toLowerCase()),
   );
@@ -160,7 +160,7 @@ export function POList({ onAddPO, onViewPO }: POListProps) {
                         <div className="flex items-center gap-2">
                           <Truck className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium text-foreground">
-                            {po.supplier.name}
+                            {po.supplier?.name || "No Supplier / Walk-in"}
                           </span>
                         </div>
                       </td>

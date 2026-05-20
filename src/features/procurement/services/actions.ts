@@ -23,7 +23,7 @@ export async function getPurchaseOrders(): Promise<POWithDetails[]> {
 
       result.push({
         ...row.purchase_orders,
-        supplier: row.suppliers!,
+        supplier: row.suppliers ?? null,
         items: items.map(i => ({
           ...i.po_items,
           product: i.products!
@@ -55,7 +55,7 @@ export async function getPurchaseOrderById(id: string): Promise<POWithDetails | 
 
     return {
       ...po.purchase_orders,
-      supplier: po.suppliers!,
+      supplier: po.suppliers ?? null,
       items: items.map(i => ({
         ...i.po_items,
         product: i.products!
