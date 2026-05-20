@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "POS YOGA - Admin Dashboard",
+  title: "Toko Mas Yoga - Admin Dashboard",
   description: "Point of Sale Management System",
 };
 

@@ -16,7 +16,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <div
           className={cn(
             "flex flex-col transition-all duration-300",
-            sidebarOpen ? "pl-64" : "pl-20"
+            sidebarOpen ? "pl-72" : "pl-20",
           )}
         >
           <Navbar />

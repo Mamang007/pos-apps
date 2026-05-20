@@ -63,16 +63,18 @@ export function Sidebar() {
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen border-r border-border bg-card transition-all duration-300",
-        sidebarOpen ? "w-64" : "w-20"
+        sidebarOpen ? "w-72" : "w-20",
       )}
     >
       <div className="flex h-16 items-center justify-between px-6 border-b border-border">
-        <div className={cn("flex items-center gap-3", !sidebarOpen && "hidden")}>
+        <div
+          className={cn("flex items-center gap-3", !sidebarOpen && "hidden")}
+        >
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
             <Store className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">
-            POS YOGA
+          <span className="font-bold tracking-tight text-foreground">
+            MAS YOGA POS SYSTEM
           </span>
         </div>
         {!sidebarOpen && (
@@ -101,13 +103,15 @@ export function Sidebar() {
                       "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all group",
                       isActive
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground",
                     )}
                   >
                     <item.icon
                       className={cn(
                         "h-5 w-5 shrink-0",
-                        isActive ? "text-primary-foreground" : "group-hover:scale-110 transition-transform"
+                        isActive
+                          ? "text-primary-foreground"
+                          : "group-hover:scale-110 transition-transform",
                       )}
                     />
                     {sidebarOpen && <span>{item.label}</span>}
