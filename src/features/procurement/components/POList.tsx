@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShoppingCart, Plus, Eye, Search, Calendar, User, Truck } from "lucide-react";
+import {
+  ShoppingCart,
+  Plus,
+  Eye,
+  Search,
+  Calendar,
+  User,
+  Truck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { type POWithDetails, type POStatus } from "../types";
@@ -33,7 +41,7 @@ export function POList({ onAddPO, onViewPO }: POListProps) {
     (po) =>
       po.supplier.name.toLowerCase().includes(search.toLowerCase()) ||
       po.status.toLowerCase().includes(search.toLowerCase()) ||
-      po.id.toLowerCase().includes(search.toLowerCase())
+      po.id.toLowerCase().includes(search.toLowerCase()),
   );
 
   const formatCurrency = (value: string | number) => {
@@ -47,15 +55,15 @@ export function POList({ onAddPO, onViewPO }: POListProps) {
   const getStatusColor = (status: POStatus) => {
     switch (status) {
       case "REQUEST":
-        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200";
+        return "bg-blue-100/30 dark:bg-blue-900/30 border-blue-200";
       case "ON PROCESS":
-        return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200";
+        return "bg-amber-100/30 dark:bg-amber-900/30 border-amber-200";
       case "RECEIVED":
-        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200";
+        return "bg-emerald-100/30 dark:bg-emerald-900/30 border-emerald-200";
       case "CANCELLED":
-        return "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border-rose-200";
+        return "bg-rose-100/30 dark:bg-rose-900/30 border-rose-200";
       default:
-        return "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400 border-gray-200";
+        return "bg-gray-100/30 dark:bg-gray-900/30 border-gray-200";
     }
   };
 
@@ -93,43 +101,73 @@ export function POList({ onAddPO, onViewPO }: POListProps) {
             <table className="w-full text-left text-sm">
               <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-semibold text-foreground">Order Date</th>
-                  <th className="px-6 py-4 font-semibold text-foreground">Supplier</th>
-                  <th className="px-6 py-4 font-semibold text-foreground">Status</th>
-                  <th className="px-6 py-4 font-semibold text-foreground">Total Amount</th>
-                  <th className="px-6 py-4 font-semibold text-foreground text-right">Actions</th>
+                  <th className="px-6 py-4 font-semibold text-foreground">
+                    Order Date
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-foreground">
+                    Supplier
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-foreground">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-foreground">
+                    Total Amount
+                  </th>
+                  <th className="px-6 py-4 font-semibold text-foreground text-right">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground italic">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-8 text-center text-muted-foreground italic"
+                    >
                       Loading purchase orders...
                     </td>
                   </tr>
                 ) : filteredPOs.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground italic">
-                      {search ? `No purchase orders matching "${search}"` : "No purchase orders found."}
+                    <td
+                      colSpan={5}
+                      className="px-6 py-8 text-center text-muted-foreground italic"
+                    >
+                      {search
+                        ? `No purchase orders matching "${search}"`
+                        : "No purchase orders found."}
                     </td>
                   </tr>
                 ) : (
                   filteredPOs.map((po) => (
-                    <tr key={po.id} className="hover:bg-accent/5 transition-colors">
+                    <tr
+                      key={po.id}
+                      className="hover:bg-accent/5 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-foreground">{format(new Date(po.orderDate), "dd MMM yyyy HH:mm")}</span>
+                          <span className="text-foreground">
+                            {format(
+                              new Date(po.orderDate),
+                              "dd MMM yyyy HH:mm",
+                            )}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <Truck className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium text-foreground">{po.supplier.name}</span>
+                          <span className="font-medium text-foreground">
+                            {po.supplier.name}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${getStatusColor(po.status as POStatus)}`}>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${getStatusColor(po.status as POStatus)}`}
+                        >
                           {po.status}
                         </span>
                       </td>

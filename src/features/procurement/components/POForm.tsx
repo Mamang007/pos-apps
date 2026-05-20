@@ -61,10 +61,10 @@ export function POForm({ suppliers, products, onSuccess, onCancel }: POFormProps
     setIsSubmitting(true);
     try {
       const result = await createPO({ supplierId, items });
-      if (result.success) {
+      if ("success" in result && result.success) {
         onSuccess();
       } else {
-        alert(result.error);
+        alert("error" in result ? result.error : "An unknown error occurred");
       }
     } finally {
       setIsSubmitting(false);
