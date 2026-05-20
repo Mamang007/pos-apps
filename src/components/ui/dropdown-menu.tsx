@@ -63,16 +63,16 @@ const DropdownMenuItem = ({ children, onClick, className }: { children: React.Re
   );
 };
 
-const DropdownMenuLabel = ({ children }: { children: React.ReactNode }) => {
+const DropdownMenuLabel = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
-    <div className="px-2 py-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+    <div className={cn("px-2 py-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-50", className)}>
       {children}
     </div>
   );
 };
 
-const DropdownMenuSeparator = () => {
-  return <div className="h-px bg-zinc-200 dark:bg-zinc-800 my-1" />;
+const DropdownMenuSeparator = ({ className }: { className?: string }) => {
+  return <div className={cn("h-px bg-zinc-200 dark:bg-zinc-800 my-1", className)} />;
 };
 
 export {

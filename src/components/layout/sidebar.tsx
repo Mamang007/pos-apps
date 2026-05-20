@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingCart, 
-  Users, 
-  Settings, 
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Settings,
   ChevronLeft,
   Store,
   FileText,
@@ -17,7 +17,8 @@ import {
   UserCog,
   ShieldCheck,
   Ticket,
-  ChevronDown
+  ChevronDown,
+  ShoppingBag,
 } from "lucide-react";
 import { useLayoutStore } from "@/hooks/use-layout-store";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const navGroups = [
     items: [
       { label: "Dashboard", href: "/", icon: LayoutDashboard },
       { label: "POS", href: "/pos", icon: ShoppingCart },
+      { label: "Purchase Order", href: "/procurement", icon: ShoppingBag },
     ],
   },
   {
@@ -61,14 +63,21 @@ export function Sidebar() {
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen border-r border-border bg-card transition-all duration-300 overflow-y-auto overflow-x-hidden",
-        sidebarOpen ? "w-64" : "w-20"
+        sidebarOpen ? "w-64" : "w-20",
       )}
     >
       <div className="sticky top-0 z-10 flex h-16 items-center justify-between px-4 border-b border-border bg-card">
-        <div className={cn("flex items-center gap-2", !sidebarOpen && "justify-center w-full")}>
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            !sidebarOpen && "justify-center w-full",
+          )}
+        >
           <Store className="h-8 w-8 text-foreground" />
           {sidebarOpen && (
-            <span className="text-xl font-bold tracking-tight text-foreground">POS YOGA</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">
+              POS YOGA
+            </span>
           )}
         </div>
         {sidebarOpen && (
@@ -105,7 +114,7 @@ export function Sidebar() {
                       isActive
                         ? "bg-accent text-accent-foreground"
                         : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                      !sidebarOpen && "justify-center"
+                      !sidebarOpen && "justify-center",
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />
