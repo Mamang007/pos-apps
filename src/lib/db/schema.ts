@@ -148,7 +148,7 @@ export const purchaseOrders = pgTable("purchase_orders", {
   userId: uuid("user_id").notNull().references(() => users.id),
   orderDate: timestamp("order_date").defaultNow().notNull(),
   totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),
-  status: text("status").default("PENDING").notNull(), // PENDING, RECEIVED, CANCELLED
+  status: text("status").default("REQUEST").notNull(), // REQUEST, ON PROCESS, RECEIVED, CANCELLED
 });
 
 export const poItems = pgTable("po_items", {

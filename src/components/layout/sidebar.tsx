@@ -17,7 +17,8 @@ import {
   UserCog,
   ShieldCheck,
   Ticket,
-  ChevronDown
+  ChevronDown,
+  ShoppingBag
 } from "lucide-react";
 import { useLayoutStore } from "@/hooks/use-layout-store";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const navGroups = [
     items: [
       { label: "Dashboard", href: "/", icon: LayoutDashboard },
       { label: "POS", href: "/pos", icon: ShoppingCart },
+      { label: "Procurement", href: "/procurement", icon: ShoppingBag },
     ],
   },
   {
