@@ -1,13 +1,14 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as schema from "./schema";
 
-const databaseUrl = process.env.DATABASE_URL;
-const isLocal = databaseUrl?.includes("localhost") || databaseUrl?.includes("127.0.0.1");
+const databaseUrl = process.env.DATABASE_URL!;
+const isLocal = databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1");
 
-const pool = new Pool({
-  connectionString: databaseUrl,
+// Disable prefetch/prepare as it is not supported for Supabase "Transaction" pool mode
+const queryClient = postgres(databaseUrl, { 
+  prepare: false,
   ssl: isLocal ? false : { rejectUnauthorized: false },
 });
 
-export const db = drizzle(pool, { schema });
+export const db = drizzle(queryClient, { schema });
