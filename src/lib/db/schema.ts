@@ -106,9 +106,12 @@ export const discounts = pgTable("discounts", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   type: text("type").notNull(), // PERCENTAGE, FIXED
+  scope: text("scope").notNull().default("TRANSACTION"), // TRANSACTION, PRODUCT, CATEGORY
   value: decimal("value", { precision: 12, scale: 2 }).notNull(),
   minPurchase: decimal("min_purchase", { precision: 12, scale: 2 }).default("0").notNull(),
   maxDiscount: decimal("max_discount", { precision: 12, scale: 2 }),
+  productId: uuid("product_id").references(() => products.id),
+  categoryId: uuid("category_id").references(() => categories.id),
   startDate: timestamp("start_date"),
   endDate: timestamp("end_date"),
   isActive: boolean("is_active").default(true).notNull(),

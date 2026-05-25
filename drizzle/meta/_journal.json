@@ -15,6 +15,13 @@
       "when": 1779285267932,
       "tag": "0001_overrated_jubilee",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779718334008,
+      "tag": "0002_thankful_piledriver",
+      "breakpoints": true
     }
   ]
 }
