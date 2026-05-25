@@ -11,12 +11,13 @@ import {
   products,
   vouchers,
   categories,
-  users
+  users,
+  discounts
 } from "@/lib/db/schema";
 import { eq, sql, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
-import { CheckoutInput, Product, Customer, SalesOrderWithDetails } from "../types";
+import { CheckoutInput, Product, Customer, SalesOrderWithDetails, CartItem } from "../types";
 
 export async function getPOSProducts(): Promise<Product[]> {
   try {
@@ -121,6 +122,76 @@ export async function getSalesOrderById(id: string): Promise<SalesOrderWithDetai
   }
 }
 
+export async function validateVoucherCode(code: string, items: CartItem[]) {
+  try {
+    const [row] = await db
+      .select({
+        voucher: vouchers,
+        discount: discounts,
+      })
+      .from(vouchers)
+      .innerJoin(discounts, eq(vouchers.discountId, discounts.id))
+      .where(eq(vouchers.code, code))
+      .limit(1);
+
+    if (!row) return { error: "Voucher code not found" };
+    if (row.voucher.isUsed) return { error: "Voucher has already been used" };
+    if (!row.discount.isActive) return { error: "This voucher is currently inactive" };
+
+    const subtotal = items.reduce((acc, item) => acc + item.subtotal, 0);
+    
+    // Check min purchase
+    if (subtotal < Number(row.discount.minPurchase)) {
+      return { error: `Minimum purchase of IDR ${Number(row.discount.minPurchase).toLocaleString()} required` };
+    }
+
+    // Calculate discount amount based on scope
+    let discountAmount = 0;
+    const { scope, type, value, productId, categoryId, maxDiscount } = row.discount;
+    const discountVal = Number(value);
+
+    if (scope === "TRANSACTION") {
+      if (type === "PERCENTAGE") {
+        discountAmount = (subtotal * discountVal) / 100;
+      } else {
+        discountAmount = discountVal;
+      }
+    } else if (scope === "PRODUCT") {
+      const eligibleItems = items.filter(item => item.productId === productId);
+      if (eligibleItems.length === 0) return { error: "Voucher not applicable to items in cart" };
+      
+      const eligibleSubtotal = eligibleItems.reduce((acc, item) => acc + item.subtotal, 0);
+      if (type === "PERCENTAGE") {
+        discountAmount = (eligibleSubtotal * discountVal) / 100;
+      } else {
+        // Fixed discount on product level usually applies to the whole line or once?
+        // Let's assume it applies once to the eligible subtotal.
+        discountAmount = Math.min(discountVal, eligibleSubtotal);
+      }
+    } else if (scope === "CATEGORY") {
+      const eligibleItems = items.filter(item => item.categoryId === categoryId);
+      if (eligibleItems.length === 0) return { error: "Voucher not applicable to items in cart" };
+      
+      const eligibleSubtotal = eligibleItems.reduce((acc, item) => acc + item.subtotal, 0);
+      if (type === "PERCENTAGE") {
+        discountAmount = (eligibleSubtotal * discountVal) / 100;
+      } else {
+        discountAmount = Math.min(discountVal, eligibleSubtotal);
+      }
+    }
+
+    // Apply max discount cap
+    if (maxDiscount && discountAmount > Number(maxDiscount)) {
+      discountAmount = Number(maxDiscount);
+    }
+
+    return { success: true, discountAmount, discount: row.discount };
+  } catch (error: any) {
+    console.error("Voucher validation failed error:", error);
+    return { error: `Validation error: ${error.message || "Unknown error"}` };
+  }
+}
+
 export async function checkoutAction(data: CheckoutInput) {
   const session = await auth();
   const userId = session?.user?.id;
@@ -146,7 +217,31 @@ export async function checkoutAction(data: CheckoutInput) {
         }
       }
 
-      // 2. Insert into sales_orders
+      // 2. Fetch voucher/discount if applicable for internal re-validation
+      let discountScope = "TRANSACTION";
+      let discountProductId: string | null = null;
+      let discountCategoryId: string | null = null;
+
+      if (data.voucherCode) {
+        const [row] = await tx
+          .select({
+            voucher: vouchers,
+            discount: discounts,
+          })
+          .from(vouchers)
+          .innerJoin(discounts, eq(vouchers.discountId, discounts.id))
+          .where(eq(vouchers.code, data.voucherCode))
+          .limit(1);
+
+        if (!row || row.voucher.isUsed) {
+          throw new Error("Invalid or used voucher");
+        }
+        discountScope = row.discount.scope;
+        discountProductId = row.discount.productId;
+        discountCategoryId = row.discount.categoryId;
+      }
+
+      // 3. Insert into sales_orders
       const [newSO] = await tx.insert(salesOrders).values({
         customerId: data.customerId || null,
         userId: userId,
@@ -157,15 +252,50 @@ export async function checkoutAction(data: CheckoutInput) {
         status: "COMPLETED",
       }).returning();
 
-      // 3. Insert into so_items and update stocks
+      // 4. Calculate item-level discount distribution
+      // 5. Insert into so_items and update stocks
       for (const item of data.items) {
+        let itemDiscount = 0;
+
+        if (data.voucherCode && discountScope !== "TRANSACTION") {
+          // If it's a product or category discount, we need to know if this item qualifies
+          // We'll need the product's categoryId for CATEGORY scope re-validation
+          const [product] = await tx
+            .select()
+            .from(products)
+            .where(eq(products.id, item.productId))
+            .limit(1);
+
+          if (discountScope === "PRODUCT" && item.productId === discountProductId) {
+             // Calculate proportion of total discount for this product
+             // This is complex because of maxDiscount. 
+             // Simplification: We already have the total discountAmount from client.
+             // If multiple items are eligible, we'd need to distribute.
+             // For now, let's assume one product or we distribute by subtotal.
+             
+             const eligibleItems = data.items.filter(i => i.productId === discountProductId);
+             const eligibleSubtotal = eligibleItems.reduce((acc, i) => acc + i.subtotal, 0);
+             itemDiscount = (item.subtotal / eligibleSubtotal) * data.discountAmount;
+          } else if (discountScope === "CATEGORY" && product?.categoryId === discountCategoryId) {
+             // Fetch all eligible items' categories to distribute correctly
+             // This is also complex. We'll fetch all product categories in the cart.
+             const productIds = data.items.map(i => i.productId);
+             const cartProducts = await tx.select().from(products).where(sql`${products.id} IN ${productIds}`);
+             const eligibleProductIds = cartProducts.filter(p => p.categoryId === discountCategoryId).map(p => p.id);
+             
+             const eligibleItems = data.items.filter(i => eligibleProductIds.includes(i.productId));
+             const eligibleSubtotal = eligibleItems.reduce((acc, i) => acc + i.subtotal, 0);
+             itemDiscount = (item.subtotal / eligibleSubtotal) * data.discountAmount;
+          }
+        }
+        
         await tx.insert(soItems).values({
           soId: newSO.id,
           productId: item.productId,
           quantity: item.quantity,
           unitPrice: item.unitPrice.toString(),
-          discountAmount: "0", // Simplified for now
-          taxAmount: "0", // Simplified for now
+          discountAmount: itemDiscount.toFixed(2),
+          taxAmount: "0", // Simplified
           subtotal: item.subtotal.toString(),
         });
 
@@ -187,7 +317,7 @@ export async function checkoutAction(data: CheckoutInput) {
         });
       }
 
-      // 4. Insert payment
+      // 6. Insert payment
       await tx.insert(salesOrderPayments).values({
         soId: newSO.id,
         paymentMethod: data.paymentMethod,
@@ -195,7 +325,7 @@ export async function checkoutAction(data: CheckoutInput) {
         createdAt: new Date(),
       });
 
-      // 5. Update customer loyalty points if applicable
+      // 7. Update customer loyalty points if applicable
       if (data.customerId) {
         const pointsEarned = Math.floor(data.totalAmount / 10000); // 1 point per 10k
         await tx.update(customers)
@@ -205,7 +335,7 @@ export async function checkoutAction(data: CheckoutInput) {
           .where(eq(customers.id, data.customerId));
       }
 
-      // 6. Mark voucher as used if applicable
+      // 8. Mark voucher as used if applicable
       if (data.voucherCode) {
         await tx.update(vouchers)
           .set({
@@ -215,9 +345,9 @@ export async function checkoutAction(data: CheckoutInput) {
           .where(eq(vouchers.code, data.voucherCode));
       }
 
-      revalidatePath("/procurement"); // For stock levels
+      revalidatePath("/procurement");
       revalidatePath("/products");
-      revalidatePath("/sales"); // For sales history
+      revalidatePath("/sales");
       
       return { success: true, id: newSO.id };
     });

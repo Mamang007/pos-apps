@@ -30,16 +30,21 @@ export function POSInterface({ products, customers }: POSInterfaceProps) {
         </div>
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold">Transaction Successful!</h2>
-          <p className="text-muted-foreground">Order ID: <span className="font-mono font-bold text-foreground">{lastOrderId}</span></p>
-          <p className="text-sm text-muted-foreground">The receipt has been generated and stock levels updated.</p>
+          <p className="text-muted-foreground">
+            Order ID:{" "}
+            <span className="font-mono font-bold text-foreground">
+              {lastOrderId}
+            </span>
+          </p>
+          <p className="text-sm text-muted-foreground">
+            The receipt has been generated and stock levels updated.
+          </p>
         </div>
         <div className="flex gap-4">
           <Button variant="outline" onClick={() => window.print()}>
             Print Receipt
           </Button>
-          <Button onClick={() => setLastOrderId(null)}>
-            New Transaction
-          </Button>
+          <Button onClick={() => setLastOrderId(null)}>New Transaction</Button>
         </div>
       </div>
     );
@@ -59,13 +64,16 @@ export function POSInterface({ products, customers }: POSInterfaceProps) {
         </div>
       </div>
 
-      <div className="w-[400px] shrink-0">
-        <CartPanel customers={customers} onCheckout={() => setIsPaymentModalOpen(true)} />
+      <div className="w-100 shrink-0">
+        <CartPanel
+          customers={customers}
+          onCheckout={() => setIsPaymentModalOpen(true)}
+        />
       </div>
 
-      <PaymentModal 
-        isOpen={isPaymentModalOpen} 
-        onClose={() => setIsPaymentModalOpen(false)} 
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
         onSuccess={handleCheckoutSuccess}
       />
     </div>

@@ -200,6 +200,7 @@ export function PromotionManagement() {
                   {activeTab === "DISCOUNTS" ? (
                     <tr>
                       <th className="px-6 py-4 font-semibold text-foreground">Rule Name</th>
+                      <th className="px-6 py-4 font-semibold text-foreground">Scope</th>
                       <th className="px-6 py-4 font-semibold text-foreground">Value</th>
                       <th className="px-6 py-4 font-semibold text-foreground">Conditions</th>
                       <th className="px-6 py-4 font-semibold text-foreground">Status</th>
@@ -232,6 +233,11 @@ export function PromotionManagement() {
                       <tr key={discount.id} className="hover:bg-accent/5 transition-colors">
                         <td className="px-6 py-4 font-medium text-foreground">
                           {discount.name}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+                            {discount.scope}
+                          </span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">

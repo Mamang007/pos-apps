@@ -91,6 +91,9 @@ export function SalesDetail({ order, onBack }: SalesDetailProps) {
                     <th className="px-4 py-3 font-semibold text-foreground text-right w-32">
                       Unit Price
                     </th>
+                    <th className="px-4 py-3 font-semibold text-foreground text-right w-24">
+                      Disc
+                    </th>
                     <th className="px-4 py-3 font-semibold text-foreground text-right w-32">
                       Subtotal
                     </th>
@@ -113,8 +116,11 @@ export function SalesDetail({ order, onBack }: SalesDetailProps) {
                       <td className="px-4 py-3 text-right text-muted-foreground">
                         {formatCurrency(item.unitPrice)}
                       </td>
+                      <td className="px-4 py-3 text-right text-emerald-600 font-medium">
+                        {Number(item.discountAmount) > 0 ? `-${formatCurrency(item.discountAmount)}` : "-"}
+                      </td>
                       <td className="px-4 py-3 text-right font-medium text-foreground">
-                        {formatCurrency(item.subtotal)}
+                        {formatCurrency(Number(item.subtotal) - Number(item.discountAmount))}
                       </td>
                     </tr>
                   ))}

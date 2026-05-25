@@ -1,17 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { type CartItem, type Customer, type Product } from "../types";
+import { type CartItem, type Customer, type Product, type Discount } from "../types";
 
 interface CartState {
   items: CartItem[];
   customer: Customer | null;
-  voucher: { code: string; discountAmount: number } | null;
+  voucher: { code: string; discount: Discount } | null;
   
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   setCustomer: (customer: Customer | null) => void;
-  applyVoucher: (code: string, discountAmount: number) => void;
+  applyVoucher: (code: string, discount: Discount) => void;
+  removeVoucher: () => void;
   clearCart: () => void;
 }
 
@@ -39,6 +40,7 @@ export const useCart = create<CartState>()(
               ...state.items,
               {
                 productId: product.id,
+                categoryId: product.categoryId,
                 name: product.name,
                 sku: product.sku,
                 sellPrice: Number(product.sellPrice),
@@ -65,7 +67,9 @@ export const useCart = create<CartState>()(
 
       setCustomer: (customer) => set({ customer }),
 
-      applyVoucher: (code, discountAmount) => set({ voucher: { code, discountAmount } }),
+      applyVoucher: (code, discount) => set({ voucher: { code, discount } }),
+      
+      removeVoucher: () => set({ voucher: null }),
 
       clearCart: () => set({ items: [], customer: null, voucher: null }),
     }),
