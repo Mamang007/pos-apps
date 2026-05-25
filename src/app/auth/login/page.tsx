@@ -65,7 +65,7 @@ export default function LoginPage() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="johndoe"
+                placeholder="username"
                 className="mt-1"
               />
             </div>
@@ -89,9 +89,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="text-sm font-medium text-destructive">
-              {error}
-            </div>
+            <div className="text-sm font-medium text-destructive">{error}</div>
           )}
 
           <Button type="submit" className="w-full" disabled={loading}>

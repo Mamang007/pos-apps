@@ -14,7 +14,12 @@ interface UserFormProps {
   onCancel: () => void;
 }
 
-export function UserForm({ initialData, roles, onSuccess, onCancel }: UserFormProps) {
+export function UserForm({
+  initialData,
+  roles,
+  onSuccess,
+  onCancel,
+}: UserFormProps) {
   const [name, setName] = useState(initialData?.name || "");
   const [email, setEmail] = useState(initialData?.email || "");
   const [username, setUsername] = useState(initialData?.username || "");
@@ -28,12 +33,12 @@ export function UserForm({ initialData, roles, onSuccess, onCancel }: UserFormPr
     setLoading(true);
     setError("");
 
-    const data: UserInput = { 
-      name, 
-      email, 
-      username, 
-      password: password || undefined, 
-      roleId 
+    const data: UserInput = {
+      name,
+      email,
+      username,
+      password: password || undefined,
+      roleId,
     };
 
     try {
@@ -60,34 +65,13 @@ export function UserForm({ initialData, roles, onSuccess, onCancel }: UserFormPr
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="text-sm font-medium text-foreground">Full Name</label>
+          <label className="text-sm font-medium text-foreground">
+            Full Name
+          </label>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. John Doe"
-            required
-            className="mt-1"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-foreground">Email Address</label>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="john@example.com"
-            required
-            className="mt-1"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-foreground">Username</label>
-          <Input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="johndoe"
+            placeholder="e.g. Yudhy"
             required
             className="mt-1"
           />
@@ -95,7 +79,36 @@ export function UserForm({ initialData, roles, onSuccess, onCancel }: UserFormPr
 
         <div>
           <label className="text-sm font-medium text-foreground">
-            {initialData ? "Password (leave blank to keep current)" : "Password"}
+            Email Address
+          </label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="yudhy@example.com"
+            required
+            className="mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-foreground">
+            Username
+          </label>
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="yudhy"
+            required
+            className="mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-foreground">
+            {initialData
+              ? "Password (leave blank to keep current)"
+              : "Password"}
           </label>
           <Input
             type="password"
@@ -115,7 +128,9 @@ export function UserForm({ initialData, roles, onSuccess, onCancel }: UserFormPr
             required
             className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <option value="" disabled>Select a role</option>
+            <option value="" disabled>
+              Select a role
+            </option>
             {roles.map((role) => (
               <option key={role.id} value={role.id}>
                 {role.name}
